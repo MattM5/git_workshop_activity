@@ -140,15 +140,20 @@ void interrupt_handler(void)
 	// ----===========================----
 
 	// TODO 5a: Read the ipending register to ensure the correct IRQ line was triggered [IRQ2].
+	int ipending;
+	NIOS2_READ_IPENDING(ipending);
 
 	// TODO 5b: Return from the ISR if IRQ2 was not the one triggered
+	if (ipending != 0x4) return;
 
 	// TODO 6a: Read the edge capture register to see which pin of the PIO was triggered.
+	int key_triggered = IORD(KEY_BASE, 3);
 
 	// TODO 6b: Return from the ISR if bit 0 of the PIO was not the one causing the interrupt.
+	if (key_triggered != 0x1) return;
 
 	// TODO 7: Clear the edge capture register so that the interrupt does not keep triggering.
-
+	IOWR(KEY_BASE, 3, 0x0);
 
 	// Service the interrupt by cycling the selected HEX display.
 	// YOU SHOULD NOT NEED TO EDIT CODE BELOW HERE
